@@ -136,23 +136,23 @@ func Pointer1() {
 	increaseUp(&src)
 	fmt.Printf("src=%v,src of address ptraddr=%v\n", src, &src)
 	var ptr = new(int)
-	fmt.Printf("ptr=%v\n,ptr of address ptr_addr=%v\n,increse end of ptr=%v\n", ptr, &ptr,*ptr) //n的取地址
+	fmt.Printf("ptr=%v\n,ptr of address ptr_addr=%v\n,increse end of ptr=%v\n", ptr, &ptr, *ptr) //n的取地址
 }
 
 //fmt格式字符
-func FmtVerbs(){
+func FmtVerbs() {
 	fmt.Println("fmt格式字符")
 	//1.
 	fmt.Println("通用字符")
-	 //%v 值
-	 //%T 数据类型
-	 
+	//%v 值
+	//%T 数据类型
+
 	//2.整数
-	 //%d 十进制（没有前缀）
-	 //%b 二进制（没有前缀）
-	 //%o 八进制（没有前缀）
-	 //%x 十六进制a-f（没有前缀）
-	 //%X 十六进制A-F（没有前缀）
-	 //%U U+四位16进制int32
+	//%d 十进制（没有前缀）
+	//%b 二进制（没有前缀）
+	//%o 八进制（没有前缀）
+	//%x 十六进制a-f（没有前缀）
+	//%X 十六进制A-F（没有前缀）
+	//%U U+四位16进制int32
 
 }
