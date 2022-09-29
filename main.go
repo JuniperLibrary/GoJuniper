@@ -10,20 +10,21 @@ package main
 	单个主文件 go build
 */
 import (
+	"fmt"
 	"gostudy/note"
 )
 
-func main()  {
-	//fmt.Print("hello Go")
+func main() {
+	fmt.Print("hello Go")
 	//同包
-	// sayHello()
+	//sayHello()
 	//不同包
-	//note.SayHello()
+	note.SayHello()
 
-	//fmt.Print(note.Version)
+	fmt.Print(note.Version)
 
-	//note.VariablesAndConstants()
-	// note.BasicDataTypes()
-	// note.Pointer()
+	note.VariablesAndConstants()
+	note.BasicDataTypes()
+	//note.Pointer()
 	note.Pointer1()
 }
