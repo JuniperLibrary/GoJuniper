@@ -37,3 +37,10 @@ func TestConditionCover(t *testing.T) {
 		}
 	}
 }
+
+// if 两段
+func TestMultiSec(t *testing.T) {
+	if a := 1 == 1; a {
+		t.Log("1==1")
+	}
+}
