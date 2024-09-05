@@ -11,7 +11,7 @@ package main
 */
 import (
 	"fmt"
-	"gostudy/note"
+	"gostudy/src/ch6/main/note"
 )
 
 func main() {
