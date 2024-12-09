@@ -1,2 +1,1 @@
-# 🍍GoStudy
-学习Go的笔记和DEMO。
+Learn Golang's notes and demo.
