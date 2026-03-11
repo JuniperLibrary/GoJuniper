@@ -1,0 +1,16 @@
+.idea/
+.vscode/
+.trae/
+
+*.exe
+*.dll
+*.so
+*.dylib
+
+*.test
+*.out
+coverage.out
+
+bin/
+dist/
+tmp/
