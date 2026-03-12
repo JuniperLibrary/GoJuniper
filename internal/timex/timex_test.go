@@ -7,6 +7,9 @@ import (
 	"gojuniper/internal/timex"
 )
 
+// timex 包的测试覆盖两个常见时间处理点：
+// - RFC3339/RFC3339Nano 解析失败与成功路径
+// - “某天 00:00:00”这种业务常用需求（保留时区 Location）
 func TestParseRFC3339(t *testing.T) {
 	_, err := timex.ParseRFC3339("not-a-time")
 	if err == nil {

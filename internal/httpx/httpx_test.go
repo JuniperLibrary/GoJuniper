@@ -10,6 +10,10 @@ import (
 	"gojuniper/internal/httpx"
 )
 
+// 这些测试演示 net/http 的单元测试写法：
+// - httptest.NewRequest 构造请求
+// - httptest.NewRecorder 捕获响应
+// - 直接调用 handler 验证状态码、响应体与 JSON 编解码
 func TestHealthHandler(t *testing.T) {
 	req := httptest.NewRequest(http.MethodGet, "/health", nil)
 	rr := httptest.NewRecorder()

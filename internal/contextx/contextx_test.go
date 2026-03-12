@@ -8,6 +8,9 @@ import (
 	"gojuniper/internal/contextx"
 )
 
+// 这组测试覆盖两个分支：
+// - 正常等待到期返回 nil
+// - ctx 被取消后提前返回 ctx.Err()
 func TestSleepOrDone(t *testing.T) {
 	t.Run("finishes on time", func(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 200*time.Millisecond)

@@ -8,6 +8,10 @@ import (
 	"gojuniper/internal/iox"
 )
 
+// 这些测试覆盖 iox 的三个基础能力：
+// - 从 io.Reader 读完整内容
+// - 用 Scanner 按行读取
+// - 用 Writer 按行写出并保证换行格式
 func TestReadAllString(t *testing.T) {
 	got, err := iox.ReadAllString(strings.NewReader("hello"))
 	if err != nil {

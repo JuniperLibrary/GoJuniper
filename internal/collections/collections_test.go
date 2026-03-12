@@ -6,6 +6,10 @@ import (
 	"gojuniper/internal/collections"
 )
 
+// collections 包的测试聚焦于 slice/map 的常见题型：
+// - 去重（保持首次出现顺序）
+// - 计数（利用 map 读零值 + 自增）
+// - map 的 key 排序（让遍历结果稳定可预期）
 func TestUniqueInts(t *testing.T) {
 	// 这个测试顺便验证“保持顺序”的约定：3/1/2/4 是首次出现的顺序。
 	got := collections.UniqueInts([]int{3, 3, 1, 2, 1, 2, 4})

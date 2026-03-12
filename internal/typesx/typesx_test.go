@@ -7,6 +7,10 @@ import (
 	"gojuniper/internal/typesx"
 )
 
+// typesx 包的测试聚焦于“类型系统 + 工程写法”的几个常见点：
+// - 构造函数做参数校验，并返回可识别的哨兵错误
+// - 指针接收者方法用于修改对象自身
+// - embedding（组合）让外层类型复用内层字段与方法
 func TestNewUser(t *testing.T) {
 	t.Run("invalid id", func(t *testing.T) {
 		_, err := typesx.NewUser(0, "alice")
@@ -39,6 +43,7 @@ func TestUser_SetName(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
+	// SetName 是指针接收者方法：会修改 u 本身。
 	if err := u.SetName("  bob "); err != nil {
 		t.Fatalf("unexpected error: %v", err)
 	}

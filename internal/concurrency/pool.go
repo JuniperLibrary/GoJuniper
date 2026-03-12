@@ -28,10 +28,14 @@ func Run(ctx context.Context, concurrency int, jobs []Job) error {
 		return nil
 	}
 
+	// 用派生 ctx 统一控制“整组任务”的取消；一旦任一任务失败，就 cancel 掉其它任务。
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	// jobCh 是任务队列：生产者把任务塞进来，多个 worker 并发消费。
 	jobCh := make(chan Job)
+	// errCh 只需要记录“第一个错误”，所以容量为 1；
+	// 写入使用 non-blocking，避免多个 worker 同时报错时相互阻塞。
 	errCh := make(chan error, 1)
 
 	var wg sync.WaitGroup
@@ -58,6 +62,7 @@ func Run(ctx context.Context, concurrency int, jobs []Job) error {
 		}()
 	}
 
+	// 生产者：依次投递任务；遇到取消则停止投递；最后关闭 jobCh 让 worker 退出循环。
 	go func() {
 		defer close(jobCh)
 		for _, job := range jobs {
@@ -69,6 +74,7 @@ func Run(ctx context.Context, concurrency int, jobs []Job) error {
 		}
 	}()
 
+	// 等待所有 worker 退出（要么把任务做完，要么被取消，要么某个任务报错后提前退出）。
 	wg.Wait()
 
 	select {

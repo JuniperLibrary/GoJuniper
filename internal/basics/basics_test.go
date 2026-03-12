@@ -6,6 +6,9 @@ import (
 	"gojuniper/internal/basics"
 )
 
+// basics 包的测试以“入门可读性”为第一目标：
+// - 先看测试理解函数的输入输出与边界条件
+// - 再去看实现（basics.go）对照理解写法
 func TestSum(t *testing.T) {
 	// 入门测试：验证最简单的纯函数输出。
 	if got := basics.Sum(1, 2); got != 3 {

@@ -7,6 +7,9 @@ import (
 	"gojuniper/internal/syncx"
 )
 
+// syncx 包的测试覆盖两个典型并发安全点：
+// - Mutex 保护共享变量（Counter）
+// - Once 确保初始化只执行一次（OnceValue）
 func TestCounter(t *testing.T) {
 	var c syncx.Counter
 

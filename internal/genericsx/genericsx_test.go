@@ -6,6 +6,7 @@ import (
 	"gojuniper/internal/genericsx"
 )
 
+// 这几个测试分别验证 Map/Filter/Reduce 三种最常见的泛型“高阶函数”模式。
 func TestMap(t *testing.T) {
 	got := genericsx.Map([]int{1, 2, 3}, func(v int) string {
 		switch v {

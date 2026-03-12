@@ -53,6 +53,7 @@ func Merge(ctx context.Context, ins ...<-chan int) <-chan int {
 	var wg sync.WaitGroup
 	wg.Add(len(ins))
 	for _, ch := range ins {
+		// for range 变量在循环中会复用，这里拷贝一份避免 goroutine 捕获到同一个变量。
 		ch := ch
 		go func() {
 			defer wg.Done()
@@ -66,6 +67,7 @@ func Merge(ctx context.Context, ins ...<-chan int) <-chan int {
 		}()
 	}
 
+	// 等所有输入 channel 都关闭后，再关闭 out，让下游 range 正常退出。
 	go func() {
 		wg.Wait()
 		close(out)

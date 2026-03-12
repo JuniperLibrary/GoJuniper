@@ -10,6 +10,10 @@ import (
 	"gojuniper/internal/concurrency"
 )
 
+// concurrency 包的测试覆盖 worker pool 的三个关键行为：
+// - 并发度参数校验
+// - 所有任务都能被执行完
+// - 任一任务失败后，能尽快取消其它任务并返回第一个错误
 func TestRun(t *testing.T) {
 	t.Run("invalid concurrency", func(t *testing.T) {
 		// 非法参数应该被明确拒绝（返回可识别的错误）。

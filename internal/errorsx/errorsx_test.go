@@ -7,6 +7,9 @@ import (
 	"gojuniper/internal/errorsx"
 )
 
+// errorsx 包的测试重点是“可识别的错误”：
+// - 参数错误用哨兵错误（errors.Is 可判断）
+// - 解析类错误用 %w 包裹底层错误，保留上下文
 func TestParsePositiveInt(t *testing.T) {
 	// 子测试（t.Run）用于让不同场景的失败信息更清晰。
 	t.Run("non-number", func(t *testing.T) {

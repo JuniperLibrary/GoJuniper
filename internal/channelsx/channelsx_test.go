@@ -9,6 +9,10 @@ import (
 	"gojuniper/internal/channelsx"
 )
 
+// 这个测试把 channels 的几个经典模式串起来练：
+// - generator 生成数据
+// - pipeline 做变换（平方）
+// - fan-in 合并多个输入
 func TestPipeline_GenerateSquareMerge(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
