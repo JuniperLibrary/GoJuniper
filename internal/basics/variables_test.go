@@ -39,7 +39,8 @@ func TestZeroValues(t *testing.T) {
 		t.Errorf("Chan zero value = %v, want nil", zv.Chan)
 	}
 	if zv.Func != nil {
-		t.Errorf("Func zero value = %v, want nil", zv.Func)
+		// Function values have no meaningful zero value to print; just fail if non-nil.
+		t.Errorf("Func zero value is non-nil, want nil")
 	}
 }
 
