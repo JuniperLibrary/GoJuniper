@@ -98,4 +98,11 @@ func main() {
 	for i = 0; i < MAX; i++ {
 		fmt.Printf("a[%d] = %d\n", i, *ptr[i])
 	}
+
+	/*
+		Go语言指针
+	*/
+
+	var b int = 10
+	fmt.Printf("变量的地址：%x\n", &b)
 }

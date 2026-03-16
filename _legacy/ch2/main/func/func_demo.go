@@ -5,6 +5,36 @@ import (
 	"fmt"
 )
 
+/*
+	Go 语言函数的定义格式
+			func function_name ( [parameter list]) [retutn_types]{
+				函数体
+			}
+*/
+
+func max(num1, num2 int) int {
+	var result int
+	if num1 > num2 {
+		result = num1
+	} else if num2 > num1 {
+		result = num2
+	}
+	return result
+}
+
+/*函数返回多个值*/
+func swap(x, y string) (string, string) {
+	return y, x
+}
+
+/*
+	函数参数
+		函数如果使用参数，改变量可称为函数的形参
+			形参就像定义在函数体内的局部变量,调用函数，可以通过两种方式来传递参数
+				值传递
+				引用传递
+*/
+
 // main 是程序的入口点。
 func main() {
 	a, b := 10, 2
@@ -36,6 +66,19 @@ func main() {
 
 	// 从映射中删除一个元素，演示映射的删除操作。
 	delete(maps, "a")
+
+	/* 定义局部变量 */
+	d := 100
+	e := 200
+	var ret int
+
+	/* 调用函数并返回最大值 */
+	ret = max(d, e)
+
+	fmt.Printf("最大值是 : %d\n", ret)
+
+	f, g := swap("hello", "world")
+	fmt.Println(f, g)
 }
 
 // div 尝试执行两个整数的除法操作。
