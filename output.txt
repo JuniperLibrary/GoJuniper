@@ -1,0 +1,1 @@
+Hello, World!一次性写入文件
