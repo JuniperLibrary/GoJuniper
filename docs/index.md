@@ -49,7 +49,7 @@ docs/
 
 ## 进阶路线
 
-完成以上六阶段后，进入 [FUTURE.md](../FUTURE.md) 继续：
+完成以上六阶段后，进入 [FUTURE.md](FUTURE.md) 继续：
 
 - **阶段六**：工程化与测试（benchmark/profiling/fuzzing/lint）
 - **阶段七**：Web 框架与 API 设计（Gin/REST/JWT/OpenAPI）

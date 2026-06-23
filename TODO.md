@@ -36,4 +36,4 @@
 
 > 阶段顺序：零 → 一 → 二 → 三 → 四 → 五（不允许跳阶段）
 > 每个阶段学完输出 `docs/` 下的复习笔记 + git commit
-> 进阶学习见 [FUTURE.md](FUTURE.md) — 阶段六～九 + 实战项目
+> 进阶学习见 [docs/FUTURE.md](docs/FUTURE.md) — 阶段六～九 + 实战项目
