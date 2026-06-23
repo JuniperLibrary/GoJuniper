@@ -47,6 +47,18 @@ docs/
 | `internal/syncx` | Arc / Mutex |
 | `internal/httpx` | reqwest / axum |
 
+## 进阶路线
+
+完成以上六阶段后，进入 [FUTURE.md](../FUTURE.md) 继续：
+
+- **阶段六**：工程化与测试（benchmark/profiling/fuzzing/lint）
+- **阶段七**：Web 框架与 API 设计（Gin/REST/JWT/OpenAPI）
+- **阶段八**：存储与数据（database/sql/sqlx/GORM/Redis）
+- **阶段九**：进阶架构（DI/observability/gRPC/消息队列）
+- **实战项目**：URL Shortener / Blog API / Chat Room
+
+---
+
 ## 学习原则
 
 - **测试驱动**：每个模块都有 `*_test.go`，先看测试理解函数行为，再读实现
