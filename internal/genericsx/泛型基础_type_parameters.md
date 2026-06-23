@@ -47,7 +47,66 @@ func Identity[T any](v T) T {
 
 ---
 
-## 4. 初学者常见坑
+## 4. GetLargest：有约束的泛型（对应 Rust PartialOrd）
+
+除了 `any`，Go 泛型还支持带约束的类型参数。`cmp.Ordered` 是 Go 1.21+ 内置的约束，表示"可排序类型"（int、string、float64、rune 等）：
+
+```go
+func GetLargest[T cmp.Ordered](xs []T) (T, bool) {
+    if len(xs) == 0 {
+        var zero T
+        return zero, false
+    }
+    largest := xs[0]
+    for _, v := range xs[1:] {
+        if v > largest {
+            largest = v
+        }
+    }
+    return largest, true
+}
+```
+
+这直接对应 Rust 中 `fn get_largest<T: PartialOrd>(list: &[T]) -> &T` 的模式：
+
+```rust
+// Rust 实现
+fn get_largest<T: PartialOrd>(list: &[T]) -> &T {
+    let mut largest = &list[0];
+    for item in list {
+        if item > largest {
+            largest = item;
+        }
+    }
+    largest
+}
+```
+
+测试用例如下：
+
+```go
+// Go：整数列表
+numbers := []int{34, 50, 25, 100, 65}
+got, _ := genericsx.GetLargest(numbers) // 100
+
+// Go：rune 列表
+chars := []rune{'y', 'm', 'a', 'q'}
+got, _ = genericsx.GetLargest(chars) // 'y'
+```
+
+```rust
+// Rust：整数列表
+let numbers = vec![34, 50, 25, 100, 65];
+let result = get_largest(&numbers); // 100
+
+// Rust：字符列表
+let chars = vec!['y', 'm', 'a', 'q'];
+let result = get_largest(&chars); // 'y'
+```
+
+---
+
+## 5. 初学者常见坑
 
 1. 把泛型当“运行期反射”理解（不是的，它仍然是静态类型检查）
 2. 过早写复杂约束（初学先掌握 `any` 与最简单约束即可）
@@ -55,15 +114,16 @@ func Identity[T any](v T) T {
 
 ---
 
-## 5. 练习清单
+## 6. 练习清单
 
-1. 写 `Contains[T comparable](xs []T, v T) bool`
+1. 写 `Contains[T comparable](xs []T, v T) bool`（对应 Rust `slice.contains(&v)`）
 2. 写 `GroupBy[T any, K comparable](xs []T, key func(T) K) map[K][]T`
 3. 写 `MapError[T any, U any](xs []T, f func(T) (U, error)) ([]U, error)`
+4. 参考 `GetLargest` 写 `GetSmallest[T cmp.Ordered](xs []T) (T, bool)`
 
 ---
 
-## 6. 自测命令
+## 7. 自测命令
 
 ```bash
 go test ./internal/genericsx -shuffle on

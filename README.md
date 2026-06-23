@@ -18,19 +18,20 @@ GoJuniper/
     hello/
     server/
   internal/           # 仅仓库内部可导入的学习模块（每个 topic 配测试）
-    basics/
-    collections/
-    errorsx/
-    typesx/
-    iox/
-    jsonx/
-    timex/
-    contextx/
-    concurrency/
-    channelsx/
-    syncx/
-    httpx/
-    genericsx/
+    basics/            # 变量/控制流/基本类型
+    funcsx/            # 函数进阶：闭包/defer/变参
+    collections/       # slice + map 操作
+    errorsx/           # 错误处理
+    typesx/            # struct/方法/接口/组合
+    iox/               # I/O 操作
+    jsonx/             # JSON 编解码
+    timex/             # 时间处理
+    contextx/          # Context 取消/超时
+    concurrency/       # 并发编程
+    channelsx/         # Channel 模式
+    syncx/             # 同步原语
+    httpx/             # HTTP 服务
+    genericsx/         # 泛型
   _legacy/            # 历史学习代码封存（Go 工具链默认忽略 _ 开头目录）
   go.mod
   README.md
@@ -74,8 +75,34 @@ go run ./cmd/server -addr :8080
 
 每个模块都配套 `*_test.go`，建议学习顺序：先看测试用例，再读实现，最后自己改动让测试继续通过。
 
+### 概念分类（Rust → Go 对照）
+
+> 本仓库参照 Rust 学习项目的概念分类方法组织 Go 代码，每个包对应一个语言特性，
+> 实现 + 测试 + 知识文档三位一体。右侧 Rust 对照列帮助你建立跨语言映射。
+
+| Go 包 | 对应 Rust 概念 | Rust 对照示例 |
+|---|---|---|
+| `internal/basics` | 变量/控制流/基础类型 | `let x = 42`; `if`/`loop`/`match` |
+| `internal/funcsx` | 函数/闭包/defer | `Fn` trait；`move \|x\| x + 1` |
+| `internal/typesx` | struct/trait/enum | `struct User` / `trait Display` / `enum Option` |
+| `internal/collections` | Vec/HashMap | `vec![]` / `HashMap::new()` |
+| `internal/errorsx` | Result/Error | `Result<T,E>` / `?` / `anyhow` |
+| `internal/genericsx` | 泛型 + trait bound | `fn largest<T: PartialOrd>` |
+| `internal/iox` | std::io | `Read` / `Write` / `BufReader` |
+| `internal/jsonx` | serde / JSON | `serde_json::from_str` |
+| `internal/timex` | chrono / time | `chrono::DateTime` / `Duration` |
+| `internal/contextx` | 无直接对应（Go 特色） | — |
+| `internal/concurrency` | std::thread | `thread::spawn` / `Arc<Mutex<T>>` |
+| `internal/channelsx` | mpsc / crossbeam | `sync::mpsc` / `select!` |
+| `internal/syncx` | Arc / Mutex | `Arc::new(Mutex::new(v))` |
+| `internal/httpx` | reqwest / axum | `reqwest::Client` / axum handlers |
+
+### 包详情
+
 - `internal/basics`：变量/循环/switch、rune 与字符串、边界条件、uint64 溢出检查（[basics.go](file:///e:/dingchuan/GoJuniper/internal/basics/basics.go)）
   - 知识文档：[常量与变量与作用域与初始化.md](file:///e:/dingchuan/GoJuniper/internal/basics/常量与变量与作用域与初始化.md)
+- `internal/funcsx`：函数进阶：闭包、defer 后进先出、变参、panic/recover（[funcsx.go](file:///e:/dingchuan/GoJuniper/internal/funcsx/funcsx.go)）
+  - 知识文档：[函数进阶_closures_defer.md](file:///e:/dingchuan/GoJuniper/internal/funcsx/函数进阶_closures_defer.md)
 - `internal/collections`：slice + map（去重、计数）、key 排序、泛型 map key 提取（[collections.go](file:///e:/dingchuan/GoJuniper/internal/collections/collections.go)）
   - 知识文档：[切片与映射_slice与map.md](file:///e:/dingchuan/GoJuniper/internal/collections/切片与映射_slice与map.md)
 - `internal/errorsx`：错误处理：`fmt.Errorf("%w")`、`errors.Is`、`errors.Join`（[errorsx.go](file:///e:/dingchuan/GoJuniper/internal/errorsx/errorsx.go)）
@@ -88,7 +115,7 @@ go run ./cmd/server -addr :8080
   - 知识文档：[JSON基础_tag与编解码.md](file:///e:/dingchuan/GoJuniper/internal/jsonx/JSON基础_tag与编解码.md)
 - `internal/timex`：time：RFC3339 解析、Duration 计算、StartOfDay（[timex.go](file:///e:/dingchuan/GoJuniper/internal/timex/timex.go)）
   - 知识文档：[时间_time_parse_duration.md](file:///e:/dingchuan/GoJuniper/internal/timex/时间_time_parse_duration.md)
-- `internal/contextx`：context：取消/超时、“sleep or done”常见模式（[contextx.go](file:///e:/dingchuan/GoJuniper/internal/contextx/contextx.go)）
+- `internal/contextx`：context：取消/超时、"sleep or done"常见模式（[contextx.go](file:///e:/dingchuan/GoJuniper/internal/contextx/contextx.go)）
   - 知识文档：[Context基础_取消与超时.md](file:///e:/dingchuan/GoJuniper/internal/contextx/Context基础_取消与超时.md)
 - `internal/concurrency`：并发：worker pool，首错返回 + 取消其它任务（[pool.go](file:///e:/dingchuan/GoJuniper/internal/concurrency/pool.go)）
   - 知识文档：[并发基础_worker_pool与取消.md](file:///e:/dingchuan/GoJuniper/internal/concurrency/并发基础_worker_pool与取消.md)
@@ -98,8 +125,27 @@ go run ./cmd/server -addr :8080
   - 知识文档：[并发安全_mutex与once.md](file:///e:/dingchuan/GoJuniper/internal/syncx/并发安全_mutex与once.md)
 - `internal/httpx`：HTTP：`http.Handler/ServeMux`、JSON 请求/响应、`httptest` 测试（[httpx.go](file:///e:/dingchuan/GoJuniper/internal/httpx/httpx.go)）
   - 知识文档：[HTTP基础_handler与httptest.md](file:///e:/dingchuan/GoJuniper/internal/httpx/HTTP基础_handler与httptest.md)
-- `internal/genericsx`：泛型：Map/Filter/Reduce（[genericsx.go](file:///e:/dingchuan/GoJuniper/internal/genericsx/genericsx.go)）
+- `internal/genericsx`：泛型：Map/Filter/Reduce、GetLargest（对应 Rust `get_largest<T: PartialOrd>`）（[genericsx.go](file:///e:/dingchuan/GoJuniper/internal/genericsx/genericsx.go)）
   - 知识文档：[泛型基础_type_parameters.md](file:///e:/dingchuan/GoJuniper/internal/genericsx/泛型基础_type_parameters.md)
+
+`GetLargest` 示例直接对应 Rust 经典泛型模式：
+
+```go
+numbers := []int{34, 50, 25, 100, 65}
+got, _ := genericsx.GetLargest(numbers)   // → 100（整数列表）
+
+chars := []rune{'y', 'm', 'a', 'q'}
+got, _ = genericsx.GetLargest(chars)       // → 'y'（rune 列表）
+```
+
+```rust
+// Rust 对应实现
+let numbers = vec![34, 50, 25, 100, 65];
+let result = get_largest(&numbers);         // → 100
+
+let chars = vec!['y', 'm', 'a', 'q'];
+let result = get_largest(&chars);           // → 'y'
+```
 
 ## _legacy 目录说明
 
