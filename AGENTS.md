@@ -26,7 +26,7 @@ GoJuniper/
     genericsx/         # 泛型
   _legacy/            # 历史学习代码封存
   gin_learn/          # Gin web 框架学习
-  docs/               # 学习笔记（按阶段组织）
+  docs/               # 学习笔记 + TODO.md 完整路线图
   go.mod
   README.md
   AGENTS.md
@@ -36,7 +36,7 @@ GoJuniper/
 
 ```bash
 go test ./...                     # 运行所有测试
-go test -shuffle on ./internal/basics/...  # 随机顺序跑单个模块测试
+go test -shuffle on ./internal/basics/...  # 随机顺序跑单个模块
 go run ./cmd/hello                # 运行 hello 示例
 go run ./cmd/server -addr :8080   # 运行 http 服务
 go vet ./...                      # 静态检查
@@ -55,7 +55,7 @@ gofmt -w .                        # 格式化代码
 
 ## 本仓库用途
 
-渐进式 Go 学习：基本类型 → 函数 → 集合 → 错误处理 → 类型系统 → I/O → JSON → 时间 → Context → 并发 → Channel → 同步 → HTTP → 泛型。每个概念有可运行代码 + 测试 + 知识文档。
+渐进式 Go 学习：10 个阶段从语言基础到生产级项目。每个概念有可运行代码 + 测试 + 知识文档。
 
 ## 用户协作规范（首次对话请先阅读此处）
 
@@ -73,14 +73,13 @@ gofmt -w .                        # 格式化代码
 
 ### 文档输出与提交规范（每次必做）
 1. **每一课都要输出**：
-   - `docs/` 下的对应笔记文件（如 `docs/01-基础/01-变量与类型.md`）
+   - `docs/` 下的对应笔记文件
    - 文件格式：是什么 → 怎么用 → 为什么 → 常见坑
    - 学习过程回顾总结（放在笔记末尾或单独说明）
 2. 用 `todowrite` 管理学习进度，一课一个 todo，完成后立即标记
-3. **每一课结束后必须提交代码**：用 `git commit` 提交当课的所有改动，commit message 格式为 `docs: 第X课 - <课程主题>`
+3. **每一课结束后必须提交代码**：用 `git commit` 提交当课的所有改动，commit message 格式为 `docs: 第X阶段 - <主题>`
 
 ### 学习路径编排
-- 严格按照 TODO.md 的阶段路线图推进（阶段零 → 阶段五）
-- 已完成的 `internal/` 模块按阶段跳学或复习，不允许跳阶段
-- 语言基础未学完前（阶段五未完成前），不进入 FUTURE.md 的进阶内容
-- 进阶学习（阶段六～九）参考 [docs/FUTURE.md](docs/FUTURE.md) 路线图
+- 严格按照 [docs/TODO.md](docs/TODO.md) 的十阶段路线图推进（阶段一 → 阶段十）
+- 每个阶段都是下一阶段的前置，不允许跳阶段
+- 语言基础未学完前（阶段六未完成前），不进入工程化/Web/架构等内容

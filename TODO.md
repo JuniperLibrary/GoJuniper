@@ -1,39 +1,21 @@
 # GoJuniper 学习路线图
 
-## 阶段零：夯实基础（基本类型与语法）
+> 完整版见 [docs/TODO.md](docs/TODO.md) — 涵盖基础 → 进阶 → 实战全阶段
 
-- [ ] `internal/basics` — 变量/常量/基本类型/switch/循环
-- [ ] `internal/funcsx` — 函数进阶：闭包/defer/变参/panic-recover
-- [ ] `internal/collections` — slice + map 操作
+## 快速索引
 
-## 阶段一：类型系统与错误处理
+| 阶段 | 内容 | 代码 |
+|------|------|------|
+| 一～六 | 语言基础（变量/类型/函数/集合/错误/IO/时间/并发/网络/泛型） | `internal/*` |
+| 七 | 工程化与测试 | `internal/testingx/` |
+| 八 | Web 框架与 API | `cmd/todo-api/` |
+| 九 | 存储与数据 | 接入 PostgreSQL/SQLite |
+| 十 | 进阶架构 | DI/Observability/gRPC |
 
-- [ ] `internal/typesx` — struct/方法/接口/组合/embedding
-- [ ] `internal/errorsx` — 错误处理：`%w`/`errors.Is`/`errors.Join`
-
-## 阶段二：I/O 与数据编解码
-
-- [ ] `internal/iox` — io.Reader/io.Writer/bufio
-- [ ] `internal/jsonx` — JSON tag/marshal/unmarshal
-
-## 阶段三：时间与上下文
-
-- [ ] `internal/timex` — time 解析/Duration/时区
-- [ ] `internal/contextx` — Context 取消/超时/传值
-
-## 阶段四：并发编程
-
-- [ ] `internal/concurrency` — goroutine/worker pool/错误传播
-- [ ] `internal/channelsx` — channel 模式：generator/pipeline/fan-in
-- [ ] `internal/syncx` — Mutex/RWMutex/sync.Once
-
-## 阶段五：网络与泛型
-
-- [ ] `internal/httpx` — HTTP handler/ServeMux/httptest
-- [ ] `internal/genericsx` — 泛型：Map/Filter/Reduce/GetLargest
+**进度：** ⬜ 未开始 → 🟡 进行中 → ✅ 已完成
 
 ---
 
-> 阶段顺序：零 → 一 → 二 → 三 → 四 → 五（不允许跳阶段）
-> 每个阶段学完输出 `docs/` 下的复习笔记 + git commit
-> 进阶学习见 [docs/FUTURE.md](docs/FUTURE.md) — 阶段六～九 + 实战项目
+> 阶段顺序严格：一 → 二 → ... → 十（不允许跳阶段）
+> 每个阶段学完输出 docs/ 笔记 + git commit
+> 完整详细版请移步 [docs/TODO.md](docs/TODO.md)
