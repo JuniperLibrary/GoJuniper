@@ -50,3 +50,14 @@ func DeferInspect(nums []int) (log string) {
 	log += "body"
 	return
 }
+
+func ApplyFunc(a, b int, f func(int, int) int) int {
+	return f(a, b)
+}
+
+func Factorial(n int) int {
+	if n <= 0 {
+		return 1
+	}
+	return n * Factorial(n-1)
+}

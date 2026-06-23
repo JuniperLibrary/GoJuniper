@@ -53,7 +53,6 @@ func Merge(ctx context.Context, ins ...<-chan int) <-chan int {
 	var wg sync.WaitGroup
 	wg.Add(len(ins))
 	for _, ch := range ins {
-		// for range 变量在循环中会复用，这里拷贝一份避免 goroutine 捕获到同一个变量。
 		ch := ch
 		go func() {
 			defer wg.Done()
@@ -67,11 +66,61 @@ func Merge(ctx context.Context, ins ...<-chan int) <-chan int {
 		}()
 	}
 
-	// 等所有输入 channel 都关闭后，再关闭 out，让下游 range 正常退出。
 	go func() {
 		wg.Wait()
 		close(out)
 	}()
 
+	return out
+}
+
+// FibonacciSelect 使用 select + quit channel 生成斐波那契数列的前 n 项。
+func FibonacciSelect(ctx context.Context, n int) ([]int, error) {
+	fibCh := make(chan int)
+	quit := make(chan int, 1)
+
+	go func() {
+		x, y := 0, 1
+		for {
+			select {
+			case fibCh <- x:
+				x, y = y, x+y
+			case <-quit:
+				return
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
+
+	result := make([]int, 0, n)
+	for i := 0; i < n; i++ {
+		select {
+		case v := <-fibCh:
+			result = append(result, v)
+		case <-ctx.Done():
+			quit <- 0
+			return nil, ctx.Err()
+		}
+	}
+	quit <- 0
+	return result, nil
+}
+
+// FibonacciChannel 生成斐波那契数列的前 n 项，通过 channel 逐个发送，完成后 close。
+func FibonacciChannel(ctx context.Context, n int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		x, y := 0, 1
+		for i := 0; i < n; i++ {
+			select {
+			case out <- x:
+				x, y = y, x+y
+			case <-ctx.Done():
+				return
+			}
+		}
+	}()
 	return out
 }

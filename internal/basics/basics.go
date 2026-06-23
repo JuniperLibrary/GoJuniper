@@ -7,7 +7,9 @@ package basics
 
 import (
 	"errors"
+	"fmt"
 	"math"
+	"strconv"
 	"strings"
 )
 
@@ -154,4 +156,29 @@ func itoa(n int) string {
 		n /= 10
 	}
 	return string(b[i:])
+}
+
+func IotaDemo() (int, int, int) {
+	const (
+		a = iota
+		b
+		c
+	)
+	return a, b, c
+}
+
+func SwapByPointer(a, b *int) {
+	tmp := *a
+	*a = *b
+	*b = tmp
+}
+
+func TypeConvertDemo(f float64) (int, string) {
+	return int(f), strconv.FormatFloat(f, 'f', -1, 64)
+}
+
+func MakeVsNew() (string, string) {
+	s := make([]int, 3)
+	p := new([]int)
+	return fmt.Sprintf("make=%v len=%d", s, len(s)), fmt.Sprintf("new=%v nil=%v", *p, *p == nil)
 }

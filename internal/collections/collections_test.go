@@ -41,3 +41,39 @@ func TestMapKeysSorted(t *testing.T) {
 		}
 	}
 }
+
+func TestMakeVsNew(t *testing.T) {
+	makeIsInit, newIsPtr := collections.MakeVsNew()
+	if !makeIsInit {
+		t.Fatal("make 返回的 map 应该是已初始化的（非 nil）")
+	}
+	if !newIsPtr {
+		t.Fatal("new 应该返回指针")
+	}
+}
+
+func TestSliceAppendDemo(t *testing.T) {
+	got := collections.SliceAppendDemo()
+	want := []int{0, 1, 2, 3, 4}
+	if len(got) != len(want) {
+		t.Fatalf("len=%d; want %d", len(got), len(want))
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("got[%d]=%d; want %d", i, got[i], want[i])
+		}
+	}
+}
+
+func TestSliceCopyDemo(t *testing.T) {
+	src := []int{1, 2, 3}
+	dst := collections.SliceCopyDemo(src)
+	if len(dst) < len(src) {
+		t.Fatalf("dst len=%d; want >= %d", len(dst), len(src))
+	}
+	for i := range src {
+		if dst[i] != src[i] {
+			t.Fatalf("dst[%d]=%d; want %d", i, dst[i], src[i])
+		}
+	}
+}

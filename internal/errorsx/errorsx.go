@@ -9,6 +9,24 @@ import (
 	"strconv"
 )
 
+// DivideError 表示除法运算中的错误，包含被除数和除数信息。
+type DivideError struct {
+	Dividend int
+	Divisor  int
+}
+
+func (e *DivideError) Error() string {
+	return fmt.Sprintf("cannot divide %d by %d", e.Dividend, e.Divisor)
+}
+
+// SafeDivide 执行安全的整数除法，除数为零时返回 DivideError。
+func SafeDivide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, &DivideError{Dividend: a, Divisor: b}
+	}
+	return a / b, nil
+}
+
 // ErrNotPositive 表示解析后得到的整数不是正数。
 var ErrNotPositive = errors.New("value must be positive")
 

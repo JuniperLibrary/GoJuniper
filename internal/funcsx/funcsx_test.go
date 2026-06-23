@@ -86,3 +86,28 @@ func TestDeferInspect(t *testing.T) {
 		}
 	})
 }
+
+func TestApplyFunc(t *testing.T) {
+	add := func(a, b int) int { return a + b }
+	got := funcsx.ApplyFunc(3, 4, add)
+	if got != 7 {
+		t.Fatalf("ApplyFunc(3,4,add)=%d, want 7", got)
+	}
+}
+
+func TestFactorial(t *testing.T) {
+	tests := []struct {
+		n    int
+		want int
+	}{
+		{n: -1, want: 1},
+		{n: 0, want: 1},
+		{n: 1, want: 1},
+		{n: 5, want: 120},
+	}
+	for _, tt := range tests {
+		if got := funcsx.Factorial(tt.n); got != tt.want {
+			t.Fatalf("Factorial(%d)=%d, want %d", tt.n, got, tt.want)
+		}
+	}
+}

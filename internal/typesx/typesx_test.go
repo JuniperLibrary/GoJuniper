@@ -68,3 +68,70 @@ func TestAdmin_Embedding(t *testing.T) {
 		t.Fatalf("expected super admin")
 	}
 }
+
+func TestShaper(t *testing.T) {
+	c := typesx.Circle{Radius: 5}
+	r := typesx.Rectangle{Width: 3, Height: 4}
+
+	var s typesx.Shaper
+
+	s = c
+	if s.Area() != 78.53981633974483 {
+		t.Fatalf("Circle Area: got %v, want %v", s.Area(), 78.53981633974483)
+	}
+	if s.Perimeter() != 31.41592653589793 {
+		t.Fatalf("Circle Perimeter: got %v, want %v", s.Perimeter(), 31.41592653589793)
+	}
+
+	s = r
+	if s.Area() != 12 {
+		t.Fatalf("Rectangle Area: got %v, want 12", s.Area())
+	}
+	if s.Perimeter() != 14 {
+		t.Fatalf("Rectangle Perimeter: got %v, want 14", s.Perimeter())
+	}
+}
+
+func TestTypeAssertString(t *testing.T) {
+	got, ok := typesx.TypeAssertString("hello")
+	if !ok || got != "hello" {
+		t.Fatalf(`TypeAssertString("hello") = %q, %v; want "hello", true`, got, ok)
+	}
+
+	_, ok = typesx.TypeAssertString(42)
+	if ok {
+		t.Fatalf(`TypeAssertString(42) ok = %v; want false`, ok)
+	}
+}
+
+func TestTypeSwitch(t *testing.T) {
+	tests := []struct {
+		val  interface{}
+		want string
+	}{
+		{42, "int"},
+		{"go", "string"},
+		{3.14, "float64"},
+		{true, "unknown"},
+	}
+	for _, tc := range tests {
+		if got := typesx.TypeSwitch(tc.val); got != tc.want {
+			t.Errorf("TypeSwitch(%v) = %q, want %q", tc.val, got, tc.want)
+		}
+	}
+}
+
+func TestFileReadWriter(t *testing.T) {
+	var r typesx.Reader = typesx.File{}
+	if got := r.Read(); got != "hello" {
+		t.Fatalf("File.Read() = %q, want %q", got, "hello")
+	}
+
+	var w typesx.Writer = typesx.File{}
+	w.Write("test")
+
+	var rw typesx.ReadWriter = typesx.File{}
+	if got := rw.Read(); got != "hello" {
+		t.Fatalf("ReadWriter.Read() = %q, want %q", got, "hello")
+	}
+}

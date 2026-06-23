@@ -7,6 +7,7 @@ package concurrency
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 )
 
@@ -83,4 +84,11 @@ func Run(ctx context.Context, concurrency int, jobs []Job) error {
 	default:
 		return nil
 	}
+}
+
+// SimpleGoroutine 启动一个基础 goroutine，执行完毕后向 results 发送消息。
+func SimpleGoroutine(id int, results chan<- string) {
+	go func() {
+		results <- fmt.Sprintf("Goroutine %d finished", id)
+	}()
 }

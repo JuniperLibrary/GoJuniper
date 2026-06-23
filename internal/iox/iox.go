@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"os"
 )
 
 // ReadAllString 读取 r 的全部内容并返回 string。
@@ -57,4 +58,65 @@ func JoinLines(lines []string) string {
 		b.WriteString(s)
 	}
 	return b.String()
+}
+
+// ReadFile 一次性读取文件全部内容并返回 string。
+func ReadFile(path string) (string, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	return string(b), nil
+}
+
+// WriteFile 一次性将内容写入文件（覆盖写入）。
+func WriteFile(path, content string) error {
+	return os.WriteFile(path, []byte(content), 0644)
+}
+
+// AppendToFile 将内容追加写入文件末尾，文件不存在时会自动创建。
+func AppendToFile(path, content string) error {
+	f, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	_, err = f.WriteString(content)
+	return err
+}
+
+// CopyFile 复制文件，返回复制的字节数。
+func CopyFile(src, dst string) (int64, error) {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return 0, err
+	}
+	defer srcFile.Close()
+
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return 0, err
+	}
+	defer dstFile.Close()
+
+	return io.Copy(dstFile, srcFile)
+}
+
+// FileExists 检查文件或目录是否存在。
+func FileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil || !os.IsNotExist(err)
+}
+
+// ListDir 读取目录下的所有条目名称（文件与子目录）。
+func ListDir(path string) ([]string, error) {
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return nil, err
+	}
+	names := make([]string, 0, len(entries))
+	for _, e := range entries {
+		names = append(names, e.Name())
+	}
+	return names, nil
 }

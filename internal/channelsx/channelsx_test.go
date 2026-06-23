@@ -2,6 +2,7 @@ package channelsx_test
 
 import (
 	"context"
+	"reflect"
 	"sort"
 	"testing"
 	"time"
@@ -36,5 +37,33 @@ func TestPipeline_GenerateSquareMerge(t *testing.T) {
 		if got[i] != want[i] {
 			t.Fatalf("got[%d]=%d, want %d", i, got[i], want[i])
 		}
+	}
+}
+
+func TestFibonacciSelect(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	got, err := channelsx.FibonacciSelect(ctx, 10)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	want := []int{0, 1, 1, 2, 3, 5, 8, 13, 21, 34}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("got=%v, want=%v", got, want)
+	}
+}
+
+func TestFibonacciChannel(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	defer cancel()
+
+	got := make([]int, 0, 10)
+	for v := range channelsx.FibonacciChannel(ctx, 10) {
+		got = append(got, v)
+	}
+	want := []int{0, 1, 1, 2, 3, 5, 8, 13, 21, 34}
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("got=%v, want=%v", got, want)
 	}
 }

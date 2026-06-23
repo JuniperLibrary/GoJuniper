@@ -47,3 +47,10 @@ func TestOnceValue(t *testing.T) {
 		t.Fatalf("calls=%d, want 1", calls)
 	}
 }
+
+func TestWorkerGroup(t *testing.T) {
+	n := syncx.WorkerGroup(5)
+	if n != 5 {
+		t.Fatalf("got=%d, want 5", n)
+	}
+}

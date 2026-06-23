@@ -85,3 +85,17 @@ func TestRun(t *testing.T) {
 		}
 	})
 }
+
+func TestSimpleGoroutine(t *testing.T) {
+	results := make(chan string, 1)
+	concurrency.SimpleGoroutine(42, results)
+	select {
+	case msg := <-results:
+		want := "Goroutine 42 finished"
+		if msg != want {
+			t.Fatalf("got=%q, want %q", msg, want)
+		}
+	case <-time.After(time.Second):
+		t.Fatal("timeout waiting for goroutine result")
+	}
+}

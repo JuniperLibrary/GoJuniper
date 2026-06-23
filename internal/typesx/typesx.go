@@ -7,6 +7,7 @@ package typesx
 import (
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 )
 
@@ -67,4 +68,87 @@ type Admin struct {
 // IsSuper 判断管理员等级是否达到“超级管理员”。
 func (a Admin) IsSuper() bool {
 	return a.Level >= 10
+}
+
+// Shaper 定义几何形状的行为：计算面积和周长。
+type Shaper interface {
+	Area() float64
+	Perimeter() float64
+}
+
+// Circle 表示圆形。
+type Circle struct {
+	Radius float64
+}
+
+// Area 计算圆的面积。
+func (c Circle) Area() float64 {
+	return math.Pi * c.Radius * c.Radius
+}
+
+// Perimeter 计算圆的周长。
+func (c Circle) Perimeter() float64 {
+	return 2 * math.Pi * c.Radius
+}
+
+// Rectangle 表示矩形。
+type Rectangle struct {
+	Width, Height float64
+}
+
+// Area 计算矩形面积。
+func (r Rectangle) Area() float64 {
+	return r.Width * r.Height
+}
+
+// Perimeter 计算矩形周长。
+func (r Rectangle) Perimeter() float64 {
+	return 2 * (r.Width + r.Height)
+}
+
+// TypeAssertString 对 interface{} 进行类型断言，尝试提取字符串值。
+func TypeAssertString(val interface{}) (string, bool) {
+	s, ok := val.(string)
+	return s, ok
+}
+
+// TypeSwitch 使用类型选择判断 interface{} 的底层类型。
+func TypeSwitch(val interface{}) string {
+	switch val.(type) {
+	case int:
+		return "int"
+	case string:
+		return "string"
+	case float64:
+		return "float64"
+	default:
+		return "unknown"
+	}
+}
+
+// Reader 定义读取行为。
+type Reader interface {
+	Read() string
+}
+
+// Writer 定义写入行为。
+type Writer interface {
+	Write(string)
+}
+
+// ReadWriter 通过接口组合同时描述读写行为。
+type ReadWriter interface {
+	Reader
+	Writer
+}
+
+// File 是一个空结构体，同时实现 Reader 和 Writer。
+type File struct{}
+
+func (f File) Read() string {
+	return "hello"
+}
+
+func (f File) Write(data string) {
+	// 模拟写入，实际不执行 I/O。
 }

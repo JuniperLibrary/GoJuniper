@@ -54,3 +54,25 @@ func TestJoin(t *testing.T) {
 		t.Fatalf("expected joined error to contain a and b, got %v", got)
 	}
 }
+
+func TestSafeDivide(t *testing.T) {
+	t.Run("normal division", func(t *testing.T) {
+		got, err := errorsx.SafeDivide(10, 2)
+		if err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
+		if got != 5 {
+			t.Fatalf("got=%d, want 5", got)
+		}
+	})
+
+	t.Run("divide by zero", func(t *testing.T) {
+		_, err := errorsx.SafeDivide(10, 0)
+		if err == nil {
+			t.Fatalf("expected error, got nil")
+		}
+		if err.Error() != "cannot divide 10 by 0" {
+			t.Fatalf("got %q, want %q", err.Error(), "cannot divide 10 by 0")
+		}
+	})
+}

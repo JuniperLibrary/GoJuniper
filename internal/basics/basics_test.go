@@ -125,3 +125,38 @@ func TestCountWords(t *testing.T) {
 		t.Fatalf("CountWords=%d, want 3", got)
 	}
 }
+
+func TestIotaDemo(t *testing.T) {
+	a, b, c := basics.IotaDemo()
+	if a != 0 || b != 1 || c != 2 {
+		t.Fatalf("IotaDemo()=%d,%d,%d, want 0,1,2", a, b, c)
+	}
+}
+
+func TestSwapByPointer(t *testing.T) {
+	a, b := 10, 20
+	basics.SwapByPointer(&a, &b)
+	if a != 20 || b != 10 {
+		t.Fatalf("after SwapByPointer: a=%d,b=%d, want 20,10", a, b)
+	}
+}
+
+func TestTypeConvertDemo(t *testing.T) {
+	a, b := basics.TypeConvertDemo(3.14)
+	if a != 3 {
+		t.Fatalf("TypeConvertDemo int=%d, want 3", a)
+	}
+	if b != "3.14" {
+		t.Fatalf("TypeConvertDemo str=%q, want %q", b, "3.14")
+	}
+}
+
+func TestMakeVsNew(t *testing.T) {
+	got1, got2 := basics.MakeVsNew()
+	if got1 != "make=[0 0 0] len=3" {
+		t.Fatalf("got1=%q, want %q", got1, "make=[0 0 0] len=3")
+	}
+	if got2 != "new=[] nil=true" {
+		t.Fatalf("got2=%q, want %q", got2, "new=[] nil=true")
+	}
+}

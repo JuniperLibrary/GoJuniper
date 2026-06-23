@@ -39,3 +39,30 @@ func MapKeysSorted[V any](m map[string]V) []string {
 	sort.Strings(keys)
 	return keys
 }
+
+// MakeVsNew 演示 make 与 new 的区别：
+// make 返回初始化值（非 nil），new 返回指针。
+func MakeVsNew() (makeIsInit bool, newIsPtr bool) {
+	m := make(map[int]string)
+	makeIsInit = m != nil
+
+	p := new(map[int]string)
+	newIsPtr = p != nil
+	return
+}
+
+// SliceAppendDemo 演示 append 动态增长，返回最终切片。
+func SliceAppendDemo() []int {
+	var s []int
+	s = append(s, 0)
+	s = append(s, 1)
+	s = append(s, 2, 3, 4)
+	return s
+}
+
+// SliceCopyDemo 演示 copy 函数，将 src 复制到新切片并返回。
+func SliceCopyDemo(src []int) []int {
+	dst := make([]int, len(src), cap(src)*2)
+	copy(dst, src)
+	return dst
+}

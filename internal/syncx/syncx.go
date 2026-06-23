@@ -46,3 +46,17 @@ func (o *OnceValue[T]) Get(f func() T) T {
 	})
 	return o.v
 }
+
+// WorkerGroup 启动 n 个 goroutine，用 WaitGroup 等待全部完成，返回 n。
+func WorkerGroup(n int) int {
+	var wg sync.WaitGroup
+	for i := range n {
+		wg.Add(1)
+		go func(id int) {
+			defer wg.Done()
+			_ = id
+		}(i)
+	}
+	wg.Wait()
+	return n
+}
