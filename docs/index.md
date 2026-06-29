@@ -38,20 +38,20 @@ docs/
 
 | Go 包 | 对应 Rust 概念 |
 |-------|---------------|
-| `internal/basics` | 变量/控制流/基本类型 |
-| `internal/funcsx` | 函数/闭包/defer → `Fn` trait |
-| `internal/collections` | Vec/HashMap |
-| `internal/typesx` | struct/trait/enum |
-| `internal/errorsx` | Result/Error |
-| `internal/genericsx` | 泛型 + trait bound |
-| `internal/iox` | std::io |
-| `internal/jsonx` | serde / JSON |
-| `internal/timex` | chrono / time |
-| `internal/contextx` | 无直接对应（Go 特色） |
-| `internal/concurrency` | std::thread |
-| `internal/channelsx` | mpsc / crossbeam |
-| `internal/syncx` | Arc / Mutex |
-| `internal/httpx` | reqwest / axum |
+| `internal/01-basics` | 变量/控制流/基本类型 |
+| `internal/02-funcsx` | 函数/闭包/defer → `Fn` trait |
+| `internal/03-collections` | Vec/HashMap |
+| `internal/04-typesx` | struct/trait/enum |
+| `internal/05-errorsx` | Result/Error |
+| `internal/14-genericsx` | 泛型 + trait bound |
+| `internal/06-iox` | std::io |
+| `internal/07-jsonx` | serde / JSON |
+| `internal/08-timex` | chrono / time |
+| `internal/09-contextx` | 无直接对应（Go 特色） |
+| `internal/10-concurrency` | std::thread |
+| `internal/11-channelsx` | mpsc / crossbeam |
+| `internal/12-syncx` | Arc / Mutex |
+| `internal/13-httpx` | reqwest / axum |
 
 ---
 

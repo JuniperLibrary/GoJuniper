@@ -113,8 +113,8 @@ Go 的 context 是标准库，所有框架和工具都遵守同一约定。
 
 ---
 
-对应的代码文件：`internal/contextx/contextx.go` / `internal/contextx/contextx_test.go`
+对应的代码文件：`internal/09-contextx/contextx.go` / `internal/09-contextx/contextx_test.go`
 
 ```
-cd /Users/dingchuan/Documents/Repos/GoJuniper && go test ./internal/contextx/ -v
+cd /Users/dingchuan/Documents/Repos/GoJuniper && go test ./internal/09-contextx/ -v
 ```

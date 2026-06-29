@@ -93,5 +93,5 @@ Go 把 HTTP 放在标准库里，不像 Rust 需要选 axum/actix-web/tide。这
 
 ---
 
-**参考代码**：`internal/httpx/httpx.go` · `internal/httpx/httpx_test.go`
-**运行测试**：`go test ./internal/httpx/`
+**参考代码**：`internal/13-httpx/httpx.go` · `internal/13-httpx/httpx_test.go`
+**运行测试**：`go test ./internal/13-httpx/`

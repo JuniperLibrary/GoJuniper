@@ -12,13 +12,13 @@
 
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
-| 1.1 变量与类型 | 变量声明、零值、基础类型、rune/string、类型大小 | ★ | 2h | 读 `internal/basics` 源码 + 跑测试 |
+| 1.1 变量与类型 | 变量声明、零值、基础类型、rune/string、类型大小 | ★ | 2h | 读 `internal/01-basics` 源码 + 跑测试 |
 | 1.2 控制流 | for 循环、if/switch、defer、break/continue | ★ | 1.5h | 跑 `TestFizzBuzz`，自己改逻辑 |
-| 1.3 函数 | 多返回值、命名返回值、变参函数 | ★ | 1h | `internal/funcsx` 的 Sum 和 DeferInspect |
+| 1.3 函数 | 多返回值、命名返回值、变参函数 | ★ | 1h | `internal/02-funcsx` 的 Sum 和 DeferInspect |
 | 1.4 闭包与 defer | 闭包捕获、defer LIFO 顺序、panic/recover | ★★ | 2h | Counter 闭包、RecoverFromPanic |
-| 1.5 切片与映射 | slice 预分配、map 去重/计数、key 排序 | ★★ | 2h | `internal/collections` 的三个函数 |
+| 1.5 切片与映射 | slice 预分配、map 去重/计数、key 排序 | ★★ | 2h | `internal/03-collections` 的三个函数 |
 
-**阶段产出：** 完成 `docs/01-基础/` 三篇笔记阅读 + `go test ./internal/basics/... ./internal/funcsx/... ./internal/collections/...` 全部通过
+**阶段产出：** 完成 `docs/01-基础/` 三篇笔记阅读 + `go test ./internal/01-basics/... ./internal/02-funcsx/... ./internal/03-collections/...` 全部通过
 
 ---
 
@@ -29,10 +29,10 @@
 
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
-| 2.1 struct 与方法 | 值接收者 vs 指针接收者、构造函数模式 | ★★ | 2h | `internal/typesx` 的 User 类型 |
+| 2.1 struct 与方法 | 值接收者 vs 指针接收者、构造函数模式 | ★★ | 2h | `internal/04-typesx` 的 User 类型 |
 | 2.2 接口 | `fmt.Stringer`、接口即约定、鸭子类型 | ★★ | 2h | 给 User 实现 String() |
 | 2.3 组合（embedding） | struct 嵌入、字段提升、与继承的区别 | ★★ | 1.5h | Admin 嵌入 User |
-| 2.4 哨兵错误 | `errors.New`、自定义错误变量 | ★ | 1h | `internal/errorsx` 的 ErrNotPositive |
+| 2.4 哨兵错误 | `errors.New`、自定义错误变量 | ★ | 1h | `internal/05-errorsx` 的 ErrNotPositive |
 | 2.5 错误包裹 | `fmt.Errorf("%w")`、`errors.Is` | ★★ | 1.5h | 解析错误时带上下文 |
 | 2.6 错误合并 | `errors.Join`、多错误聚合 | ★★ | 1h | Join 函数 |
 
@@ -43,7 +43,7 @@ func (u User) Greeting() string { return "hello, " + u.Name }
 func NewUser(id int, name string) (User, error) { /* 校验后返回 */ }
 ```
 
-**阶段产出：** `docs/02-类型与错误/` 笔记 + `go test ./internal/typesx/... ./internal/errorsx/...` 通过
+**阶段产出：** `docs/02-类型与错误/` 笔记 + `go test ./internal/04-typesx/... ./internal/05-errorsx/...` 通过
 
 ---
 
@@ -54,15 +54,15 @@ func NewUser(id int, name string) (User, error) { /* 校验后返回 */ }
 
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
-| 3.1 io.Reader / io.Writer | 接口定义、组合、`io.ReadAll` | ★★ | 2h | `internal/iox` 的 ReadAllString |
+| 3.1 io.Reader / io.Writer | 接口定义、组合、`io.ReadAll` | ★★ | 2h | `internal/06-iox` 的 ReadAllString |
 | 3.2 bufio | Scanner 按行读取、buffer 调优 | ★★ | 1.5h | ReadLines 的 buffer 设置 |
 | 3.3 缓冲写入 | bufio.NewWriter、Flush 语义 | ★★ | 1h | WriteLines 必须 Flush |
-| 3.4 JSON 序列化 | `json.Marshal` / `Unmarshal`、struct tag | ★★ | 2h | `internal/jsonx` 基础用法 |
+| 3.4 JSON 序列化 | `json.Marshal` / `Unmarshal`、struct tag | ★★ | 2h | `internal/07-jsonx` 基础用法 |
 | 3.5 omitempty | 零值与omit、指针字段 | ★★ | 1h | JSON tag 的 omitempty 行为 |
 
 **常见坑：** bufio.Writer 忘记 Flush 导致数据丢失、JSON 未导出字段不会被编解码、omitempty 对零值 struct 无效
 
-**阶段产出：** `docs/03-IO与数据/` 笔记 + `go test ./internal/iox/... ./internal/jsonx/...` 通过
+**阶段产出：** `docs/03-IO与数据/` 笔记 + `go test ./internal/06-iox/... ./internal/07-jsonx/...` 通过
 
 ---
 
@@ -73,10 +73,10 @@ func NewUser(id int, name string) (User, error) { /* 校验后返回 */ }
 
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
-| 4.1 时间解析/格式化 | RFC3339、time.Layout、时区 | ★★ | 2h | `internal/timex` 的 ParseRFC3339 |
+| 4.1 时间解析/格式化 | RFC3339、time.Layout、时区 | ★★ | 2h | `internal/08-timex` 的 ParseRFC3339 |
 | 4.2 Duration 计算 | Sub、Add、Since/Until | ★ | 1h | Until 函数 |
 | 4.3 时间截断 | Date() 分解、StartOfDay 模式 | ★★ | 1h | StartOfDay 实现 |
-| 4.4 Context 接口 | Deadline/Done/Err/Value | ★★ | 1.5h | `internal/contextx` 的 SleepOrDone |
+| 4.4 Context 接口 | Deadline/Done/Err/Value | ★★ | 1.5h | `internal/09-contextx` 的 SleepOrDone |
 | 4.5 select 多路复用 | select + ctx.Done() 模式 | ★★ | 2h | 等待超时或被取消 |
 
 ```go
@@ -89,7 +89,7 @@ func SleepOrDone(ctx context.Context, d time.Duration) error {
 }
 ```
 
-**阶段产出：** `docs/04-时间与上下文/` 笔记 + `go test ./internal/timex/... ./internal/contextx/...` 通过
+**阶段产出：** `docs/04-时间与上下文/` 笔记 + `go test ./internal/08-timex/... ./internal/09-contextx/...` 通过
 
 ---
 
@@ -101,17 +101,17 @@ func SleepOrDone(ctx context.Context, d time.Duration) error {
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
 | 5.1 goroutine | go 关键字、M:N 调度、栈大小 | ★★ | 1h | 简单的 go func() 启动 |
-| 5.2 worker pool | 固定并发度、job channel、错误传播 | ★★★ | 3h | `internal/concurrency` 的 Run 函数 |
+| 5.2 worker pool | 固定并发度、job channel、错误传播 | ★★★ | 3h | `internal/10-concurrency` 的 Run 函数 |
 | 5.3 首错取消 | context.WithCancel、errCh 非阻塞写入 | ★★★ | 2h | Run 中的取消逻辑 |
-| 5.4 生成器模式 | channel 作为迭代器、close 语义 | ★★ | 1.5h | `internal/channelsx` 的 Generate |
+| 5.4 生成器模式 | channel 作为迭代器、close 语义 | ★★ | 1.5h | `internal/11-channelsx` 的 Generate |
 | 5.5 pipeline | channel 链式处理、goroutine 生命周期 | ★★ | 2h | Generate → Square 串联 |
 | 5.6 fan-in | 多路合并、sync.WaitGroup 协调 | ★★★ | 2h | Merge 函数 |
-| 5.7 Mutex | 共享变量保护、锁粒度 | ★★ | 1.5h | `internal/syncx` 的 Counter |
+| 5.7 Mutex | 共享变量保护、锁粒度 | ★★ | 1.5h | `internal/12-syncx` 的 Counter |
 | 5.8 sync.Once | 懒加载、线程安全的一次执行 | ★★ | 1h | OnceValue |
 
 **对比 Rust：** goroutine 类似 `thread::spawn` 但更轻量（KB 级栈 vs MB 级）；channel 类似 `mpsc` 但支持多读；Mutex 没有 RAII 守卫，必须显式 Lock/Unlock。
 
-**阶段产出：** `docs/05-并发/` 笔记 + `go test ./internal/concurrency/... ./internal/channelsx/... ./internal/syncx/...` 通过
+**阶段产出：** `docs/05-并发/` 笔记 + `go test ./internal/10-concurrency/... ./internal/11-channelsx/... ./internal/12-syncx/...` 通过
 
 ---
 
@@ -122,11 +122,11 @@ func SleepOrDone(ctx context.Context, d time.Duration) error {
 
 | 模块 | 核心内容 | 难度 | 预计时间 | 实践方式 |
 |------|---------|------|---------|---------|
-| 6.1 Handler 接口 | `http.Handler`、`HandlerFunc` 适配器 | ★★ | 1.5h | `internal/httpx` 的 Handler |
+| 6.1 Handler 接口 | `http.Handler`、`HandlerFunc` 适配器 | ★★ | 1.5h | `internal/13-httpx` 的 Handler |
 | 6.2 ServeMux 路由 | Go 1.22+ 增强路由、方法匹配 | ★★ | 1.5h | NewMux 的路由注册 |
 | 6.3 JSON 请求/响应 | json.Decoder/Encoder、Content-Type | ★★ | 1.5h | EchoHandler 实现 |
 | 6.4 httptest | 不启动真实端口测试 handler | ★★ | 1.5h | httpx 的测试文件 |
-| 6.5 泛型函数 | 类型参数、Map/Filter/Reduce | ★★ | 2h | `internal/genericsx` 的三个高阶函数 |
+| 6.5 泛型函数 | 类型参数、Map/Filter/Reduce | ★★ | 2h | `internal/14-genericsx` 的三个高阶函数 |
 | 6.6 类型约束 | `cmp.Ordered`、自定义约束、interface 作为约束 | ★★★ | 2h | GetLargest 的约束写法 |
 
 ```go
@@ -136,7 +136,7 @@ func Filter[T any](xs []T, pred func(T) bool) []T
 func Reduce[T, Acc any](xs []T, acc Acc, f func(Acc, T) Acc) Acc
 ```
 
-**阶段产出：** `docs/06-网络与泛型/` 笔记 + `go test ./internal/httpx/... ./internal/genericsx/...` 通过
+**阶段产出：** `docs/06-网络与泛型/` 笔记 + `go test ./internal/13-httpx/... ./internal/14-genericsx/...` 通过
 
 ---
 

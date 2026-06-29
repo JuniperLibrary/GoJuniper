@@ -36,7 +36,7 @@ GoJuniper/
 
 ```bash
 go test ./...                     # 运行所有测试
-go test -shuffle on ./internal/basics/...  # 随机顺序跑单个模块
+go test -shuffle on ./internal/01-basics/...  # 随机顺序跑单个模块
 go run ./cmd/hello                # 运行 hello 示例
 go run ./cmd/server -addr :8080   # 运行 http 服务
 go vet ./...                      # 静态检查

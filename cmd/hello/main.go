@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"gojuniper/internal/basics"
+	"gojuniper/internal/01-basics"
 )
 
 func main() {
