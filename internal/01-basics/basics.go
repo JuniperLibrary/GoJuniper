@@ -21,7 +21,7 @@ var (
 	//
 	// ⚠️ 注意：这是"哨兵错误（sentinel error）"模式——用包级导出的变量做错误比较。
 	// 调用方用 errors.Is(err, basics.ErrNegativeN) 判断，而不是直接比较字符串。
-	// 对应 Rust 里 Result<T, E> 的 E 枚举分支。
+	// 对应 Java 里用 Exception 子类或枚举错误类型做分类判断。
 	ErrNegativeN = errors.New("n must be >= 0")
 
 	// ErrOverflow 表示计算结果超过 uint64 的可表示范围。
@@ -34,7 +34,7 @@ var (
 // Sum 返回两个整数之和。
 //
 // ⚠️ 注意：Go 函数可以有多个返回值，但也可以像这样只有一个。
-// int 在 64 位平台上是 64 位，和 Rust 的 i32/i64 不同——Go 的 int 宽度随平台变化。
+	// int 在 64 位平台上是 64 位，和 Java 的 int（固定 32 位）/ long（64 位）不同——Go 的 int 宽度随平台变化。
 func Sum(a, b int) int {
 	return a + b
 }
@@ -42,7 +42,7 @@ func Sum(a, b int) int {
 // Max 返回切片的最大值；如果切片为空则返回 (0, false)。
 //
 // ⚠️ 注意：Go 习惯用 "值, ok" 这种双返回值来表示"可能不存在"。
-// 对应 Rust 的 Option<T>：有值返回 (v, true)，无值返回 (零值, false)。
+	// 对应 Java 的 Optional<T>：有值返回 (v, true)，无值返回 (零值, false)。
 // 这里空切片返回的 0 是 int 的零值，调用方必须看第二个 bool 才知道是不是真的最大值。
 func Max(xs []int) (int, bool) {
 	if len(xs) == 0 {
@@ -65,7 +65,7 @@ func Max(xs []int) (int, bool) {
 //
 // ⚠️ 注意（两个关键 Go 特性）：
 //  1. switch 后面不写表达式（裸 switch），等价于 if/else if 链；
-//     且 Go 的 case 默认【不穿透】——匹配到就执行完跳出，不需要写 break（和 C/Rust 相反）。
+	//     且 Go 的 case 默认【不穿透】——匹配到就执行完跳出，不需要写 break（和 C/Java 相反，Java 的 fall-through 也需显式，但传统 C 风格需 break）。
 //  2. 判断 15 的倍数必须放在 3 和 5 之前，否则会被 i%3==0 / i%5==0 先截胡。
 func FizzBuzz(n int) []string {
 	if n <= 0 {
@@ -177,7 +177,7 @@ func ReverseString(s string) string {
 // CountWords 返回按空白分隔的单词数量。
 //
 // ⚠️ 注意：strings.Fields 会按任意空白（空格/制表符/连续多个空格）切分，
-// 比手写 strings.Split 更贴合"单词数"语义。对应 Rust 的 s.split_whitespace().count()。
+	// 比手写 strings.Split 更贴合"单词数"语义。对应 Java 的 s.trim().split("\\s+").length。
 func CountWords(s string) int {
 	return len(strings.Fields(s))
 }
@@ -218,7 +218,7 @@ func IotaDemo() (int, int, int) {
 // SwapByPointer 通过指针交换两个 int 的值。
 //
 // ⚠️ 注意：Go 函数参数是【值传递】。想修改调用方的变量，必须传 *int 指针。
-// 对应 Rust 的 &mut i32。这里 *a = *b 解引用后赋值，才真正改到原变量。
+	// 对应 Java 里传递对象引用（或 AtomicInteger 等包装类型）来修改外部状态；Java 没有指针解引用语法，但对象字段可被方法修改。
 func SwapByPointer(a, b *int) {
 	tmp := *a
 	*a = *b

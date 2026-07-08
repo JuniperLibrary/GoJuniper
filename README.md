@@ -99,27 +99,27 @@ go run ./cmd/server -addr :8080
 
 每个模块都配套 `*_test.go`，建议学习顺序：先看测试用例，再读实现，最后自己改动让测试继续通过。
 
-### 概念分类（Rust → Go 对照）
+### 概念分类（Java → Go 对照）
 
-> 本仓库参照 Rust 学习项目的概念分类方法组织 Go 代码，每个包对应一个语言特性，
-> 实现 + 测试 + 知识文档三位一体。右侧 Rust 对照列帮助你建立跨语言映射。
+> 本仓库参照 Java 学习项目的概念分类方法组织 Go 代码，每个包对应一个语言特性，
+> 实现 + 测试 + 知识文档三位一体。右侧 Java 对照列帮助你建立跨语言映射。
 
-| Go 包 | 对应 Rust 概念 | Rust 对照示例 |
+| Go 包 | 对应 Java 概念 | Java 对照示例 |
 |---|---|---|
-| `internal/01-basics` | 变量/控制流/基础类型 | `let x = 42`; `if`/`loop`/`match` |
-| `internal/02-funcsx` | 函数/闭包/defer | `Fn` trait；`move \|x\| x + 1` |
-| `internal/04-typesx` | struct/trait/enum | `struct User` / `trait Display` / `enum Option` |
-| `internal/03-collections` | Vec/HashMap | `vec![]` / `HashMap::new()` |
-| `internal/05-errorsx` | Result/Error | `Result<T,E>` / `?` / `anyhow` |
-| `internal/14-genericsx` | 泛型 + trait bound | `fn largest<T: PartialOrd>` |
-| `internal/06-iox` | std::io | `Read` / `Write` / `BufReader` |
-| `internal/07-jsonx` | serde / JSON | `serde_json::from_str` |
-| `internal/08-timex` | chrono / time | `chrono::DateTime` / `Duration` |
+| `internal/01-basics` | 变量/控制流/基础类型 | `int x = 42`; `if`/`for`/`switch` |
+| `internal/02-funcsx` | 函数/闭包/defer | `lambda`；`try-with-resources`（`AutoCloseable`） |
+| `internal/04-typesx` | class/interface/enum | `class User` / `interface` / `enum` |
+| `internal/03-collections` | ArrayList/HashMap | `new ArrayList<>()` / `new HashMap<>()` |
+| `internal/05-errorsx` | Exception/Optional | `try-catch` / `Optional<T>` |
+| `internal/14-genericsx` | 泛型 + 边界约束 | `<T extends Comparable<T>>` |
+| `internal/06-iox` | java.io | `InputStream` / `OutputStream` / `BufferedReader` |
+| `internal/07-jsonx` | Jackson / JSON | `objectMapper.readValue(...)` |
+| `internal/08-timex` | java.time | `LocalDateTime` / `Duration` |
 | `internal/09-contextx` | 无直接对应（Go 特色） | — |
-| `internal/10-concurrency` | std::thread | `thread::spawn` / `Arc<Mutex<T>>` |
-| `internal/11-channelsx` | mpsc / crossbeam | `sync::mpsc` / `select!` |
-| `internal/12-syncx` | Arc / Mutex | `Arc::new(Mutex::new(v))` |
-| `internal/13-httpx` | reqwest / axum | `reqwest::Client` / axum handlers |
+| `internal/10-concurrency` | Thread / 虚拟线程 | `new Thread(...)` / `Thread.ofVirtual()` |
+| `internal/11-channelsx` | BlockingQueue | `LinkedBlockingQueue` / `ArrayBlockingQueue` |
+| `internal/12-syncx` | synchronized / ReentrantLock | `synchronized` / `new ReentrantLock()` |
+| `internal/13-httpx` | HttpClient / Spring Boot | `HttpClient.newHttpClient()` / Spring `@RestController` |
 
 ### 包详情
 
@@ -149,10 +149,10 @@ go run ./cmd/server -addr :8080
   - 知识文档：[并发安全_mutex与once.md](file:///e:/dingchuan/GoJuniper/internal/12-syncx/并发安全_mutex与once.md)
 - `internal/13-httpx`：HTTP：`http.Handler/ServeMux`、JSON 请求/响应、`httptest` 测试（[httpx.go](file:///e:/dingchuan/GoJuniper/internal/13-httpx/httpx.go)）
   - 知识文档：[HTTP基础_handler与httptest.md](file:///e:/dingchuan/GoJuniper/internal/13-httpx/HTTP基础_handler与httptest.md)
-- `internal/14-genericsx`：泛型：Map/Filter/Reduce、GetLargest（对应 Rust `get_largest<T: PartialOrd>`）（[genericsx.go](file:///e:/dingchuan/GoJuniper/internal/14-genericsx/genericsx.go)）
+- `internal/14-genericsx`：泛型：Map/Filter/Reduce、GetLargest（对应 Java `getLargest<T extends Comparable<T>>`）（[genericsx.go](file:///e:/dingchuan/GoJuniper/internal/14-genericsx/genericsx.go)）
   - 知识文档：[泛型基础_type_parameters.md](file:///e:/dingchuan/GoJuniper/internal/14-genericsx/泛型基础_type_parameters.md)
 
-`GetLargest` 示例直接对应 Rust 经典泛型模式：
+`GetLargest` 示例直接对应 Java 经典泛型模式：
 
 ```go
 numbers := []int{34, 50, 25, 100, 65}
@@ -162,13 +162,21 @@ chars := []rune{'y', 'm', 'a', 'q'}
 got, _ = genericsx.GetLargest(chars)       // → 'y'（rune 列表）
 ```
 
-```rust
-// Rust 对应实现
-let numbers = vec![34, 50, 25, 100, 65];
-let result = get_largest(&numbers);         // → 100
+```java
+// Java 对应实现
+List<Integer> numbers = List.of(34, 50, 25, 100, 65);
+Integer result = getLargest(numbers);         // → 100
 
-let chars = vec!['y', 'm', 'a', 'q'];
-let result = get_largest(&chars);           // → 'y'
+List<Character> chars = List.of('y', 'm', 'a', 'q');
+Character result2 = getLargest(chars);        // → 'y'
+
+public static <T extends Comparable<T>> T getLargest(List<T> list) {
+    T max = list.get(0);
+    for (T t : list) {
+        if (t.compareTo(max) > 0) max = t;
+    }
+    return max;
+}
 ```
 
 ## _legacy 目录说明

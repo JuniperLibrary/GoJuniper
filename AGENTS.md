@@ -51,7 +51,7 @@ gofmt -w .                        # 格式化代码
 - **`_legacy/` 被 Go 工具链自动忽略** — 旧代码存档，不影响构建
 - **`gin_learn/` 是独立的 Gin 框架学习** — 与基础模块分离
 - **无 CI / 无 Makefile** — `go test` 和 `go vet` 即验证手段
-- **README.md 有完整的 Rust ↔ Go 概念对照表**
+- **README.md 有完整的 Java ↔ Go 概念对照表**
 
 ## 本仓库用途
 

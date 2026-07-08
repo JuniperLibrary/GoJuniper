@@ -1,7 +1,7 @@
 # Go 学习实验室
 
 > 从零开始，动手学 Go。每个知识点都配有**可运行代码 + 单元测试 + 详细笔记**。
-> 本仓库的 Go 代码包与 Rust 学习项目结构对应，方便做跨语言对照。
+> 本仓库的 Go 代码包与 Java 学习项目结构对应，方便做跨语言对照。
 
 ## 学习进度
 
@@ -34,24 +34,24 @@ docs/
 └── index.md          # 本文件
 ```
 
-## Rust → Go 对照
+## Java → Go 对照
 
-| Go 包 | 对应 Rust 概念 |
+| Go 包 | 对应 Java 概念 |
 |-------|---------------|
 | `internal/01-basics` | 变量/控制流/基本类型 |
-| `internal/02-funcsx` | 函数/闭包/defer → `Fn` trait |
-| `internal/03-collections` | Vec/HashMap |
-| `internal/04-typesx` | struct/trait/enum |
-| `internal/05-errorsx` | Result/Error |
-| `internal/14-genericsx` | 泛型 + trait bound |
-| `internal/06-iox` | std::io |
-| `internal/07-jsonx` | serde / JSON |
-| `internal/08-timex` | chrono / time |
+| `internal/02-funcsx` | 函数/闭包/defer → `lambda` / `try-with-resources` |
+| `internal/03-collections` | ArrayList/HashMap |
+| `internal/04-typesx` | class/interface/enum |
+| `internal/05-errorsx` | Exception/Optional |
+| `internal/14-genericsx` | 泛型 + 边界约束 `<T extends Comparable<T>>` |
+| `internal/06-iox` | java.io |
+| `internal/07-jsonx` | Jackson / JSON |
+| `internal/08-timex` | java.time |
 | `internal/09-contextx` | 无直接对应（Go 特色） |
-| `internal/10-concurrency` | std::thread |
-| `internal/11-channelsx` | mpsc / crossbeam |
-| `internal/12-syncx` | Arc / Mutex |
-| `internal/13-httpx` | reqwest / axum |
+| `internal/10-concurrency` | Thread / 虚拟线程 |
+| `internal/11-channelsx` | BlockingQueue |
+| `internal/12-syncx` | synchronized / ReentrantLock |
+| `internal/13-httpx` | HttpClient / Spring Boot |
 
 ---
 
@@ -60,4 +60,4 @@ docs/
 - **测试驱动**：每个模块都有 `*_test.go`，先看测试理解函数行为，再读实现
 - **动手 > 看书**：运行 `go test`，修改代码，观察输出变化
 - **渐进式**：阶段一 → 阶段十，不跳阶段
-- **跨语言对照**：带着 Rust 经验学 Go，关注概念映射而非从头学
+- **跨语言对照**：带着 Java 经验学 Go，关注概念映射而非从头学

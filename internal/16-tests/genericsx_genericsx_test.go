@@ -47,7 +47,7 @@ func TestReduce(t *testing.T) {
 	}
 }
 
-// TestGetLargest 对应 Rust 示例中 get_largest 的测试模式：
+// TestGetLargest 对应 Java 示例中 getLargest 的测试模式：
 // - 用整数列表测试
 // - 用 rune（字符）列表测试
 func TestGetLargest(t *testing.T) {

@@ -109,7 +109,7 @@ func SleepOrDone(ctx context.Context, d time.Duration) error {
 | 5.7 Mutex | 共享变量保护、锁粒度 | ★★ | 1.5h | `internal/12-syncx` 的 Counter |
 | 5.8 sync.Once | 懒加载、线程安全的一次执行 | ★★ | 1h | OnceValue |
 
-**对比 Rust：** goroutine 类似 `thread::spawn` 但更轻量（KB 级栈 vs MB 级）；channel 类似 `mpsc` 但支持多读；Mutex 没有 RAII 守卫，必须显式 Lock/Unlock。
+**对比 Java：** goroutine 类似 `new Thread(...)` / 虚拟线程（`Thread.ofVirtual()`）但更轻量（KB 级栈 vs MB 级）；channel 类似 `BlockingQueue` 但语言内建、支持多生产者多消费者；Mutex 没有 `synchronized` 的块级作用域，必须显式 Lock/Unlock（或直接使用 `synchronized`）。
 
 **阶段产出：** `docs/05-并发/` 笔记 + `go test ./internal/10-concurrency/... ./internal/11-channelsx/... ./internal/12-syncx/...` 通过
 
@@ -240,7 +240,7 @@ func Reduce[T, Acc any](xs []T, acc Acc, f func(Acc, T) Acc) Acc
 
 1. **先跑通再深究** — 遇到看不懂的概念，先运行 `go test`，看输出，再读源码
 2. **标准库优先** — 学 Gin 前先吃透 `net/http`；学 GORM 前先吃透 `database/sql`
-3. **带着 Rust 经验看差异** — 重点理解 Go 的设计取舍：组合 vs 继承、goroutine vs thread、interface vs trait、error vs Result
+3. **带着 Java 经验看差异** — 重点理解 Go 的设计取舍：组合 vs 继承、goroutine vs Thread、interface vs interface（隐式实现 vs 显式 implements）、error vs Exception
 4. **不要跳阶段** — 每个阶段都是下一阶段的前置条件
 5. **每阶段完成后提交** — commit message 格式：`docs: 第X阶段 - <阶段名>`
 6. **善用测试** — 本仓库的每个 `internal/` 包都有测试，修改代码后跑测试验证

@@ -35,6 +35,8 @@ func SleepOrDone(ctx context.Context, d time.Duration) error {
 核心模式是 `select` 同时监听两个 channel：业务操作 vs `ctx.Done()`。
 谁先返回就执行谁的分支。这使调用方可以随时取消正在执行的函数。
 
+> ⚠️ **注意**：**context 取消后不能被"复用"或"重置"**。一旦 `ctx.Done()` 被 close，该 context 永久处于取消态，`ctx.Err()` 永远非 nil。需要重新计时/取消，必须重新 `WithTimeout` / `WithCancel` 派生新的 context，不能再继续用旧的。
+
 ### 创建 Context
 
 ```go
@@ -54,11 +56,15 @@ ctx, cancel := context.WithDeadline(ctx, time.Now().Add(100*time.Millisecond))
 defer cancel()
 ```
 
+> ⚠️ **注意**：**`cancel` 函数必须调用（建议 `defer cancel()`）**，否则内部 timer goroutine 会泄漏。`WithTimeout` / `WithCancel` 返回的 cancel 即使超时已触发也建议调用——它是幂等的，多调无害，不调会泄漏资源。
+
 ### 传递 Context 的惯例
 
 - 函数第一个参数传 `ctx context.Context`
 - 通过显式参数传递，不存 struct 字段
 - 只往下传，不上传（parent 创建 child，child 不修改 parent）
+
+> ⚠️ **注意**：**监听取消必须用 `select` 配合 `<-ctx.Done()`**，而不是轮询 `ctx.Err()`。`ctx.Err()` 只在 `Done()` 已关闭后才有意义，用它做循环条件是无法及时响应取消的（且 Done 未关时返回 nil）。正确模式永远是 `select { case <-ctx.Done(): ... }`。
 
 ## 为什么
 
@@ -77,13 +83,13 @@ Request → context.WithTimeout → goroutine A → goroutine B
                                ← 同时收到取消信号 →
 ```
 
-### Rust 没有 context
+### Java 没有标准 context
 
-Rust 的异步模型基于 `Future + poll`：一个 future 不做 poll 就不会推进，扔掉 future 就自然取消。
-Go 的 goroutine 一旦启动就会运行（除非自己阻塞），所以需要外部机制通知它退出。
+Java 的线程模型基于 `Thread`：线程一旦启动就会运行（除非阻塞或自己退出），所以需要外部机制通知它退出。
+Go 的 goroutine 同样一旦启动就会运行（除非自己阻塞），需要外部机制通知它退出。
 
-Rust 中 closest 的对应是 `tokio_util::sync::CancellationToken`，但这是第三方库而非语言标准。
-Go 的 context 是标准库，所有框架和工具都遵守同一约定。
+Java 中最近的对应是 `Thread.interrupt()`（检查中断标志）+ `Future.cancel(true)`，或 `ExecutorService` 的取消机制，但这是 JDK 标准 API 而非统一的"上下文传递"约定。
+Go 的 context 是标准库，所有框架和工具都遵守同一约定（可跨 API 边界传递取消/超时/值）。
 
 ### context.Value 的争议
 
@@ -91,6 +97,8 @@ Go 的 context 是标准库，所有框架和工具都遵守同一约定。
 - 类型不安全（key/value 都是 `interface{}`）
 - 隐式依赖难追踪
 - 只在请求全链路元数据（trace ID、认证信息）等场景使用
+
+> ⚠️ **注意**：`context.WithValue` **类型安全很差**——key/value 都是 `interface{}`，取值时要做类型断言，容易在运行时才出错。它只适合传请求级元数据（trace ID、认证信息），**绝不要用它传普通函数参数**（程序语义参数应显式声明）。
 
 ## 常见坑
 
