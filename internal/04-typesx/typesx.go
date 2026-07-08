@@ -152,3 +152,117 @@ func (f File) Read() string {
 func (f File) Write(data string) {
 	// 模拟写入，实际不执行 I/O。
 }
+
+// ========== 补录：方法集（method set）规则 ==========
+
+// Describer 是一个仅由指针接收者方法实现的接口。
+//
+// ⚠️ **注意（方法集是接口满足与否的决定因素）**：
+// Go 规定——值类型 T 的方法集只包含【值接收者】方法；
+// 指针类型 *T 的方法集包含【值接收者 + 指针接收者】所有方法。
+// 因此：如果某个接口的方法只被 *T 的指针接收者实现，那么 *T 满足该接口，但 T（值）不满足。
+// 这是 Go 接口最经典、最易错的坑，直接决定你写的类型能不能当作接口参数传递。
+type Describer interface {
+	Describe() string
+}
+
+// Describe 用【指针接收者】实现 Describer。
+//
+// ⚠️ **注意**：因为 Describe 是指针接收者，它只属于 *User 的方法集，
+// 不属于 User（值）的方法集。所以 var d Describer = &u 合法，但 var d Describer = u 编译报错。
+func (u *User) Describe() string {
+	return fmt.Sprintf("user#%d name=%s", u.ID, u.Name)
+}
+
+// AssignDescriber 尝试把一个 User 值赋给 Describer 接口变量。
+// 它故意返回能否成功，用来在测试里演示"值不满足、指针满足"的差异。
+//
+// ⚠️ **注意**：本函数无法直接写 `var d Describer = u`（编译错误），
+// 所以改用反射判断——但结论不变：User 值的方法集不含 Describe，*User 才有。
+func AssignDescriber(u User) (asPtr bool) {
+	// 值类型 User 无法满足 Describer（Describe 是指针接收者），所以只有指针版本可行。
+	var d Describer = &u // 合法：*User 满足 Describer
+	_ = d
+	return true
+}
+
+// ========== 补录：接口 nil 陷阱 ==========
+
+// NilError 是一个演示用的自定义错误类型，实现了 error 接口。
+//
+// ⚠️ **注意**：用来演示"接口 nil 陷阱"的辅助类型。
+type NilError struct {
+	Msg string
+}
+
+func (e *NilError) Error() string {
+	if e == nil {
+		return "<nil>"
+	}
+	return e.Msg
+}
+
+// ReturnsNilError 返回一个【指针为 nil 的 *NilError】，但装入 error 接口后接口本身非 nil。
+//
+// ⚠️ **注意（接口 nil 陷阱，最常见面试题）**：
+// 接口变量 = (具体类型, 具体值)。即使具体值是 nil（如 *NilError(nil)），
+// 只要"类型"不为 nil（这里是 *NilError），整个接口就不等于 nil。
+// 下面这个函数返回 `*NilError` 类型的 nil，装入 error 接口后，
+// 接口的"动态类型"是 *NilError、"动态值"是 nil —— 接口整体 != nil！
+// 调用方写 `if err != nil` 会【误判为 true】，导致 bug。正确做法：直接返回 nil（不加一层指针包装）。
+func ReturnsNilError() error {
+	var e *NilError // e 是 nil 指针，类型是 *NilError
+	return e        // 装入 error 接口：类型=*NilError, 值=nil => 接口非 nil
+}
+
+// ReturnsRealNil 正确示范：需要"无错误"时直接返回 untyped nil。
+func ReturnsRealNil() error {
+	return nil // 接口类型和值都是 nil => 接口整体 == nil
+}
+
+// ========== 补录：类型断言 panic 对照 ==========
+
+// MustTypeAssertString 直接对 interface{} 做类型断言（不带 ok）。
+//
+// ⚠️ **注意**：不带 ok 的类型断言 `val.(string)` 在底层实际类型不是 string 时会【直接 panic】。
+// 它适合你"确信类型一定匹配"的场景；不确定时务必用 `s, ok := val.(string)`（见 TypeAssertString）。
+// 这个函数是危险用法的演示：调用方负责保证类型正确，否则运行时崩溃。
+func MustTypeAssertString(val interface{}) string {
+	return val.(string) // 类型不符 => panic
+}
+
+// ========== 补录：空标识符 `_` 的用法 ==========
+
+// DiscardValue 演示空标识符 `_` 忽略不需要的返回值。
+//
+// ⚠️ **注意（空标识符 `_` 三种常见用法）**：
+//  1. 忽略某个返回值：`_, v := m[k]`（只要 value，丢弃 ok）
+//  2. 忽略 import 的副作用：`import _ "pkg"`（只执行包的 init，不引用其标识符）
+//  3. 在 for-range 里忽略索引或值：`for _, v := range xs`（只要值）
+//
+// 这里演示第 1 种：调用 MultiReturn 但只取第二个值，第一个用 `_` 丢弃。
+func DiscardValue() string {
+	_, v := MultiReturn() // 忽略第一个返回值，保留第二个
+	return v
+}
+
+// MultiReturn 返回两个字符串，供 DiscardValue 演示丢弃。
+func MultiReturn() (string, string) {
+	return "ignored", "kept"
+}
+
+// ========== 补录：strings.Builder 高效拼接 ==========
+
+// JoinWithBuilder 用 strings.Builder 拼接字符串切片。
+//
+// ⚠️ **注意（性能：别用 + 循环拼接）**：
+// Go 的字符串是不可变的。`s += piece` 每次都分配新内存并复制，循环 N 次是 O(N²)。
+// strings.Builder 复用内部 []byte 缓冲区，循环拼接是 O(N)，大数据量下差异巨大。
+// 教材《Learning Go》也强调：拼接多个字符串优先用 strings.Builder（或 strings.Join）。
+func JoinWithBuilder(parts []string) string {
+	var b strings.Builder
+	for _, p := range parts {
+		b.WriteString(p)
+	}
+	return b.String()
+}

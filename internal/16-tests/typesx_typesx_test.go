@@ -135,3 +135,71 @@ func TestFileReadWriter(t *testing.T) {
 		t.Fatalf("ReadWriter.Read() = %q, want %q", got, "hello")
 	}
 }
+
+// ===== 补录（参考《Learning Go》第二版）：方法集 / 接口 nil 陷阱 / 类型断言 panic / 空标识符 / strings.Builder =====
+
+func TestAssignDescriber(t *testing.T) {
+	u := typesx.User{ID: 1, Name: "Alice"}
+	// AssignDescriber 演示：*User 满足 Describer，User 值不满足（方法集差异）
+	if !typesx.AssignDescriber(u) {
+		t.Error("AssignDescriber should return true for valid pointer assignment")
+	}
+}
+
+func TestReturnsNilError(t *testing.T) {
+	// ReturnsNilError 返回含 nil 指针的非 nil 接口 —— 最隐蔽的接口坑
+	err := typesx.ReturnsNilError()
+	if err == nil {
+		t.Fatal("ReturnsNilError() should return non-nil interface (contains nil *NilError)")
+	}
+
+	// 正确的做法：ReturnsRealNil 返回真正的 nil
+	realNil := typesx.ReturnsRealNil()
+	if realNil != nil {
+		t.Error("ReturnsRealNil() should return nil")
+	}
+}
+
+func TestMustTypeAssertString(t *testing.T) {
+	// 安全形式
+	result := typesx.MustTypeAssertString("hello")
+	if result != "hello" {
+		t.Errorf("MustTypeAssertString(\"hello\") = %q, want \"hello\"", result)
+	}
+
+	// 危险形式：类型不匹配 => panic
+	defer func() {
+		if r := recover(); r == nil {
+			t.Error("MustTypeAssertString(123) should panic for non-string")
+		}
+	}()
+	typesx.MustTypeAssertString(123) // 这里会 panic
+}
+
+func TestDiscardValue(t *testing.T) {
+	result := typesx.DiscardValue()
+	if result != "kept" {
+		t.Errorf("DiscardValue() = %q, want \"kept\"", result)
+	}
+}
+
+func TestJoinWithBuilder(t *testing.T) {
+	tests := []struct {
+		name  string
+		parts []string
+		want  string
+	}{
+		{"empty", []string{}, ""},
+		{"single", []string{"hello"}, "hello"},
+		{"multiple", []string{"a", "b", "c"}, "abc"},
+		{"with spaces", []string{"hello", " ", "world"}, "hello world"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := typesx.JoinWithBuilder(tt.parts)
+			if got != tt.want {
+				t.Errorf("JoinWithBuilder(%v) = %q, want %q", tt.parts, got, tt.want)
+			}
+		})
+	}
+}
