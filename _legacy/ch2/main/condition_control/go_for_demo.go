@@ -11,7 +11,7 @@ func MeforDemo() {
 	// while 风格循环（省略初始化 / 后置语句）
 	count := 0
 	for count < 3 {
-		fmt.Println("count= %d,continue。。", count)
+		fmt.Printf("count= %d,continue。。\n", count)
 		count++
 	}
 	fmt.Println("循环结束")

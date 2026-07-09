@@ -28,7 +28,83 @@ const (
 	l
 )
 
+func add(a int, b int) int {
+	return a + b
+}
+
+// 实现  只要实现了接口里的方法，就自动实现接口
+type Dog struct{}
+
+func (d Dog) Speak() {
+	fmt.Println("wang")
+}
+
 func main() {
+	fmt.Println("Hello, 世界")
+	//var x int
+	//x = 788
+	// 声明变量+自动推导类型+赋值
+	y := 10
+	const Pi float64 = 3.1415
+	fmt.Println(y)
+	fmt.Println(Pi)
+
+	// %d 表示整型数字 %s 表示字符串
+	var stockcode = 123
+	var enddate = "2002-12-31"
+	var url = "Code=%d,enddate=%s"
+	var target_url_foramt = fmt.Sprintf(url, stockcode, enddate)
+	fmt.Println("url= " + target_url_foramt)
+
+	// Go 数据类型
+	// 布尔型
+	var bo bool = true
+	fmt.Println(bo)
+	// 数字类型 整数型：int、浮点型：float32、float64、复数：
+
+	// 字符串类型
+	// 派生类型
+	//    a、指针类型 Pointer 是用来保存变量的内存地址，主要是为了：修改原变量和减少内存复制
+	z := 20
+	p := &z
+	fmt.Println(p)  // 地址
+	fmt.Println(*p) // 10
+	//    b、数组类型 Array
+	var arr [3]int = [3]int{1, 2, 3}
+	fmt.Println(arr[0])
+	//    c、结构化类型 struct 相当于 Java的class
+	type UserDemo struct {
+		Name string
+		Age  int
+	}
+	u := UserDemo{Name: "Jack", Age: 18}
+	fmt.Println(u)
+	//    d、Channel 类型 通道 是 Go并发编程的核心
+	ch := make(chan int)
+	go func() {
+		ch <- 10
+	}()
+	fmt.Println(<-ch)
+
+	//    e、函数类型
+
+	f := add
+	fmt.Println(f(1, 2))
+	//    f、切片类型 Slice 动态数组 长度可变
+	s := []int{1, 2, 3}
+	s = append(s, 4)
+	//    g、接口类型 interface 接口定义 行为规范
+	type Animal interface {
+		Speak()
+	}
+
+	//    h、Map 类型
+	m := map[string]int{
+		"Tom":  16,
+		"Lucy": 34,
+	}
+	fmt.Println(m["Tom"])
+
 	//var name string
 	//name = "Bobby"
 	//
@@ -203,4 +279,5 @@ func main() {
 	ptr = &a
 	fmt.Printf("a 的值为  %d\n", a)
 	fmt.Printf("*ptr 为 %d\n", *ptr)
+
 }

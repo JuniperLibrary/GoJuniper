@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"gojuniper/internal/httpx"
+	"gojuniper/internal/13-httpx"
 )
 
 func main() {
